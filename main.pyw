@@ -171,8 +171,10 @@ def on_click(x, y, button, pressed):
 
 
 def on_press(key):
+    global prev_key
     if perf_counter() - program_start > 36000:  # if has been running for 10h
         return False
+
     try:
         if key.char == '-':
             solution._set(manual)
@@ -187,8 +189,10 @@ def on_press(key):
             solution.current.stop()
             return False
     except AttributeError:  # special key
-        if key == pynput.keyboard.Key.shift_l:
+        if prev_key == pynput.keyboard.Key.space and key == pynput.keyboard.Key.shift_l:
             extra1.current.start()
+    finally:
+        prev_key = key
 
 
 if __name__ == '__main__':
@@ -201,6 +205,7 @@ if __name__ == '__main__':
     wires = Power(fixWires)
     extra1 = Solution()
     extra1._set(wires)
+    prev_key = None
 
     mouse = pynput.mouse.Listener(on_click=on_click)
     mouse.start()
