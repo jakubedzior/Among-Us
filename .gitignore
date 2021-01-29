@@ -8,3 +8,4 @@ Screenshots/Screenshot 2021-01-17 2358014.png
 .vscode/settings.json
 .flake8
 *.png
+*.pyc
