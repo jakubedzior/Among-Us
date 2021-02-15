@@ -2,12 +2,11 @@ import pynput
 import multiprocessing
 from time import perf_counter
 
-from weather_node import weatherNode
-from cameras import camerasFlip
-from lights import autoSolution, randomSolution, manualSolution
-from wires import fixWires
-from sabotage_O2 import fixO2
-
+from weather_node import weatherNode_method
+from cameras import camerasFlip_method
+from lights import autoLights_method, randomLights_method, manualLights_method
+from wires import fixWires_method
+from sabotage_O2 import fixO2_method
 
 class Power():
     def __init__(self, function, args=[]):
@@ -52,6 +51,7 @@ class Solution():
 class KeyHistory:
     def __init__(self):
         self.list = [None, None, None]
+        self.just_matched = False
 
     def add(self, element):
         self.list[0] = self.list[1]
@@ -96,29 +96,35 @@ def on_press(key):
         key_history.add(key)
 
     finally:
-        if key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, '1']:
-            wires.current.start()
-        if key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, '2']:
-            node.current.start()
-        if key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, '3']:
-            sabotageO2.current.start()
+        if key == pynput.keyboard.Key.space and key_history.just_matched is True:
+            fixes.current.start()
+        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, '1']:
+            fixes.set_(wires)
+            fixes.current.start()
+            key_history.just_matched = True
+        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, '2']:
+            fixes.set_(node)
+            fixes.current.start()
+            key_history.just_matched = True
+        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, '3']:
+            fixes.set_(sabotageO2)
+            fixes.current.start()
+            key_history.just_matched = True
+        else:
+            key_history.just_matched = False
 
 
 if __name__ == '__main__':
-    auto = Power(autoSolution)
-    manual = Power(manualSolution)
-    random = Power(randomSolution)
-    cameras = Power(camerasFlip)
+    auto = Power(autoLights_method)
+    manual = Power(manualLights_method)
+    random = Power(randomLights_method)
+    cameras = Power(camerasFlip_method)
     initiatives = Solution(auto)
 
-    wiresPower = Power(fixWires)
-    wires = Solution(wiresPower)
-
-    nodePower = Power(weatherNode)
-    node = Solution(nodePower)
-
-    sabotageO2Power = Power(fixO2)
-    sabotageO2 = Solution(sabotageO2Power)
+    wires = Power(fixWires_method)
+    node = Power(weatherNode_method)
+    sabotageO2 = Power(fixO2_method)
+    fixes = Solution(node)  # any
 
     key_history = KeyHistory()
 
