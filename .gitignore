@@ -9,3 +9,5 @@ Screenshots/Screenshot 2021-01-17 2358014.png
 .flake8
 *.png
 *.pyc
+*.ttf
+testy2.py
