@@ -6,6 +6,7 @@ from weather_node import weatherNode
 from cameras import camerasFlip
 from lights import autoSolution, randomSolution, manualSolution
 from wires import fixWires
+from sabotage_O2 import fixO2
 
 
 class Power():
@@ -99,6 +100,8 @@ def on_press(key):
             wires.current.start()
         if key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, '2']:
             node.current.start()
+        if key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, '3']:
+            sabotageO2.current.start()
 
 
 if __name__ == '__main__':
@@ -113,6 +116,9 @@ if __name__ == '__main__':
 
     nodePower = Power(weatherNode)
     node = Solution(nodePower)
+
+    sabotageO2Power = Power(fixO2)
+    sabotageO2 = Solution(sabotageO2Power)
 
     key_history = KeyHistory()
 
