@@ -5,7 +5,7 @@ import pynput
 import ctypes
 
 
-def autoSolution(reverse=False):
+def autoLights_method(reverse=False):
     user32 = ctypes.windll.user32
     user32.SetProcessDPIAware()
     screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
@@ -38,7 +38,7 @@ def autoSolution(reverse=False):
         sleep(0.5)
 
 
-def randomSolution():
+def randomLights_method():
     user32 = ctypes.windll.user32
     user32.SetProcessDPIAware()
     screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
@@ -63,7 +63,7 @@ def randomSolution():
         sleep(0.1)
 
 
-def manualSolution():
+def manualLights_method():
     user32 = ctypes.windll.user32
     user32.SetProcessDPIAware()
     screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)

@@ -2,7 +2,7 @@ import pyautogui as py
 import ctypes
 
 
-def fixWires():
+def fixWires_method():
     user32 = ctypes.windll.user32
     user32.SetProcessDPIAware()
     screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)

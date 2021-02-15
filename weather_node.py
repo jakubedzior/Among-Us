@@ -134,7 +134,7 @@ class Node:
                 return self.path
 
 
-def weatherNode():
+def weatherNode_method():
     node = Node()
     solution = node.solve()
     try:

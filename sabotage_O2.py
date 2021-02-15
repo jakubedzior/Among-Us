@@ -2,11 +2,9 @@ import pyautogui as py
 import ctypes
 from time import sleep
 import pytesseract
-from PIL import Image
-from random import randint
 
 
-def fixO2():
+def fixO2_method():
     user32 = ctypes.windll.user32
     user32.SetProcessDPIAware()
     screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
@@ -34,6 +32,7 @@ def fixO2():
     if string.isnumeric():
         number = [int(sign) for sign in string]
     else:
+        py.click(buttons[-1])
         return
 
     for digit in number:
