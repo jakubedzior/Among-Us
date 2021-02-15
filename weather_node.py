@@ -1,20 +1,36 @@
 import pyautogui as py
+import ctypes
 
 
 class Node:
     def __init__(self):
-        self.image = py.screenshot()
-        self.board = {
-            'x1': 512,
-            'y1': 387,
-            'x2': 1404,
-            'y2': 608
-        }
+        user32 = ctypes.windll.user32
+        user32.SetProcessDPIAware()
+        screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
+        if screensize == (1980, 1080):
+            self.board = {
+                'x1': 512,
+                'y1': 387,
+                'x2': 1404,
+                'y2': 608
+            }
+        elif screensize == (2736, 1824):
+            self.board = {
+                'x1': 660,
+                'y1': 670,
+                'x2': 2075,
+                'y2': 1023
+            }
+        else:
+            raise IndexError("Your screen's size is not supported.")
+        
         self.step = (self.board['x2'] - self.board['x1']) / 16
         self.position = (self.board['x1'], self.board['y1'])
         self.path = [(self.board['x1'], self.board['y1'] - self.step), self.position]
         self.direction = 'S'
         self.counter = 0
+        self.image = py.screenshot()
+
 
     def solve(self):
 

@@ -2,29 +2,36 @@ import pyautogui as py
 from time import sleep, perf_counter
 from random import randint
 import pynput
+import ctypes
+
 
 def autoSolution(reverse=False):
-    region = (550, 850, 800, 100)
-    button = 'on.png' if reverse else 'off.png'
+    user32 = ctypes.windll.user32
+    user32.SetProcessDPIAware()
+    screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
+    if screensize == (1980, 1080):
+        positions = ((612, 900), (788, 900), (960, 900), (1140, 900), (1310, 900))
+        offset = -100
+    elif screensize == (2736, 1824):
+        positions = ((820, 1480), (1100, 1480), (1370, 1480), (1650, 1480), (1920, 1480))
+        offset = -200
+    else:
+        raise IndexError("Your screen's size is not supported.")
+        
     start = perf_counter()
+    if reverse:
+        button = (0, 255, 0)
+    else:
+        button = (26, 77, 26)
+
 
     while True:
-        clicked = []
+        img = py.screenshot()
+        for pos in positions:
+            pixel = img.getpixel(pos)
+            if pixel == button:
+                py.click((pos[0], pos[1] + offset))
 
-        img = py.screenshot(region=region)
-        for pos in py.locateAll(button, img, confidence=0.99):
-            x, y = py.center(pos)
-            x += region[0]
-            y += region[1] - 100
-
-            exists = False
-            for each in clicked:
-                if each - 5 < x < each + 5:
-                    exists = True
-                    break
-            if not exists:
-                py.click(x, y)
-                clicked.append(x)
         now = perf_counter()
         if now - start > 300:
             return
@@ -32,16 +39,23 @@ def autoSolution(reverse=False):
 
 
 def randomSolution():
-    positions = {
-        0: [(610, 780), (790, 780), (960, 780), (1140, 780), (1310, 780)],
-        1: [(1110, -310), (1240, -310), (1380, -310), (1555, -310), (1720, -310)]
-    }
+    user32 = ctypes.windll.user32
+    user32.SetProcessDPIAware()
+    screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
+    if screensize == (1980, 1080):
+        positions = ((612, 800), (788, 800), (960, 800), (1140, 800), (1310, 800))
+    elif screensize == (2736, 1824):
+        positions = ((820, 1280), (1100, 1280), (1370, 1280), (1650, 1280), (1920, 1280))
+    else:
+        raise IndexError("Your screen's size is not supported.")
+
+
     while True:
         start = perf_counter()
 
-        for position in positions[0]:
+        for pos in positions:
             if randint(0, 1) == 1:
-                py.click(position)
+                py.click(pos)
 
         now = perf_counter()
         if now - start > 300:
@@ -50,21 +64,26 @@ def randomSolution():
 
 
 def manualSolution():
+    user32 = ctypes.windll.user32
+    user32.SetProcessDPIAware()
+    screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
+    if screensize == (1980, 1080):
+        positions = ((612, 800), (788, 800), (960, 800), (1140, 800), (1310, 800))
+    elif screensize == (2736, 1824):
+        positions = ((820, 1280), (1100, 1280), (1370, 1280), (1650, 1280), (1920, 1280))
+    else:
+        raise IndexError("Your screen's size is not supported.")
+
+    keys = ['a', 's', 'd', 'q', 'e']
+
+
     def on_press_local(key):
         try:
             if key.char in keys:
-                button = keys.index(key.char)
-                py.click(positions[method][button])
+                index = keys.index(key.char)
+                py.click(positions[index])
         except AttributeError:  # special key
             pass
-
-    method = 0
-    keys = ['a', 's', 'd', 'q', 'e']
-    positions = {
-        0: [(610, 780), (790, 780), (960, 780), (1140, 780), (1310, 780)],
-        1: [(1110, -310), (1240, -310), (1380, -310), (1555, -310), (1720, -310)]
-    }
-
 
     with pynput.keyboard.Listener(on_press=on_press_local) as keyboard:
         keyboard.join()
