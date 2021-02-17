@@ -9,7 +9,7 @@ def autoLights_method(reverse=False):
     user32 = ctypes.windll.user32
     user32.SetProcessDPIAware()
     screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
-    if screensize == (1980, 1080):
+    if screensize == (1920, 1080):
         positions = ((612, 900), (788, 900), (960, 900), (1140, 900), (1310, 900))
         offset = -100
     elif screensize == (2736, 1824):
@@ -42,7 +42,7 @@ def randomLights_method():
     user32 = ctypes.windll.user32
     user32.SetProcessDPIAware()
     screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
-    if screensize == (1980, 1080):
+    if screensize == (1920, 1080):
         positions = ((612, 800), (788, 800), (960, 800), (1140, 800), (1310, 800))
     elif screensize == (2736, 1824):
         positions = ((820, 1280), (1100, 1280), (1370, 1280), (1650, 1280), (1920, 1280))
@@ -67,7 +67,7 @@ def manualLights_method():
     user32 = ctypes.windll.user32
     user32.SetProcessDPIAware()
     screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
-    if screensize == (1980, 1080):
+    if screensize == (1920, 1080):
         positions = ((612, 800), (788, 800), (960, 800), (1140, 800), (1310, 800))
     elif screensize == (2736, 1824):
         positions = ((820, 1280), (1100, 1280), (1370, 1280), (1650, 1280), (1920, 1280))

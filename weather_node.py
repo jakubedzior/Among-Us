@@ -7,7 +7,7 @@ class Node:
         user32 = ctypes.windll.user32
         user32.SetProcessDPIAware()
         screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
-        if screensize == (1980, 1080):
+        if screensize == (1920, 1080):
             self.board = {
                 'x1': 512,
                 'y1': 387,
