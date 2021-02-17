@@ -7,6 +7,9 @@ from cameras import camerasFlip_method
 from lights import autoLights_method, randomLights_method, manualLights_method
 from wires import fixWires_method
 from sabotage_O2 import fixO2_method
+from reactor import startReactor_method
+from doors import openDoor_method
+
 
 class Power():
     def __init__(self, function, args=[]):
@@ -74,7 +77,7 @@ def on_click(x, y, button, pressed):
 def on_press(key):
     if perf_counter() - program_start > 36000:  # if has been running for 10h
         return False
-        
+
     global key_history
     try:
         key_history.add(key.char)
@@ -85,8 +88,9 @@ def on_press(key):
             initiatives.set_(auto)
         if key.char == ']':
             initiatives.set_(random)
-        if key.char == 'x':
-            initiatives.set_(cameras)
+        if key.char == '`':
+            controller = pynput.keyboard.Controller()
+            controller.press(pynput.keyboard.Key.esc)
         
         if key.char == '\\':
             initiatives.current.stop()
@@ -97,19 +101,30 @@ def on_press(key):
 
     finally:
         if key == pynput.keyboard.Key.space and key_history.just_matched is True:
-            fixes.current.start()
-        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, '1']:
-            fixes.set_(wires)
-            fixes.current.start()
+            combinations.current.start()
+        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, 'w']:
+            combinations.set_(wires)
+            combinations.current.start()
             key_history.just_matched = True
-        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, '2']:
-            fixes.set_(node)
-            fixes.current.start()
+        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, 'e']:
+            combinations.set_(node)
+            combinations.current.start()
             key_history.just_matched = True
-        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, '3']:
-            fixes.set_(sabotageO2)
-            fixes.current.start()
+        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, 'r']:
+            combinations.set_(reactor)
+            combinations.current.start()
             key_history.just_matched = True
+        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, 's']:
+            combinations.set_(sabotageO2)
+            combinations.current.start()
+            key_history.just_matched = True
+        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, 'd']:
+            combinations.set_(door)
+            combinations.current.start()
+            key_history.just_matched = True
+        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, 'c']:
+            combinations.set_(cameras)
+            combinations.current.start()
         else:
             key_history.just_matched = False
 
@@ -118,13 +133,15 @@ if __name__ == '__main__':
     auto = Power(autoLights_method)
     manual = Power(manualLights_method)
     random = Power(randomLights_method)
-    cameras = Power(camerasFlip_method)
     initiatives = Solution(auto)
 
     wires = Power(fixWires_method)
     node = Power(weatherNode_method)
     sabotageO2 = Power(fixO2_method)
-    fixes = Solution(node)  # any
+    reactor = Power(startReactor_method)
+    cameras = Power(camerasFlip_method)
+    door = Power(openDoor_method)
+    combinations = Solution(node)  # any
 
     key_history = KeyHistory()
 
