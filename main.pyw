@@ -2,13 +2,16 @@ import pynput
 import multiprocessing
 from time import perf_counter
 
-from weather_node import weatherNode_method
-from cameras import camerasFlip_method
-from lights import autoLights_method, randomLights_method, manualLights_method
-from wires import fixWires_method
-from sabotage_O2 import fixO2_method
-from reactor import startReactor_method
-from doors import openDoor_method
+from initiatives.lights import autoLights_method, manualLights_method, randomLights_method
+from others.camera_flip import cameraFlip_other
+from others.door_open import doorOpen_other
+from sabotages.o2_fix import o2Fix_sabotage
+from tasks.calibrate_distribution import calibrateDistribution_task
+from tasks.chart_course import chartCourse_task
+from tasks.start_reactor import startReactor_task
+from tasks.unlock_manifolds import unlockManifolds_task
+from tasks.weather_node import weatherNode_task
+from tasks.wires import wires_task
 
 
 class Power():
@@ -61,6 +64,15 @@ class KeyHistory:
         self.list[1] = self.list[2]
         self.list[2] = element
 
+def whenCombination(key: str, power: Power, just_matched: bool = True):
+    if key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, key]:
+        combinations.set_(power)
+        combinations.current.start()
+        if just_matched:
+            key_history.just_matched = True
+        return True
+    return False
+
 
 def on_click(x, y, button, pressed):
     if pressed and button == pynput.mouse.Button.middle:
@@ -102,29 +114,24 @@ def on_press(key):
     finally:
         if key == pynput.keyboard.Key.space and key_history.just_matched is True:
             combinations.current.start()
-        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, 'w']:
-            combinations.set_(wires)
-            combinations.current.start()
-            key_history.just_matched = True
-        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, 'e']:
-            combinations.set_(node)
-            combinations.current.start()
-            key_history.just_matched = True
-        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, 'r']:
-            combinations.set_(reactor)
-            combinations.current.start()
-            key_history.just_matched = True
-        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, 's']:
-            combinations.set_(sabotageO2)
-            combinations.current.start()
-            key_history.just_matched = True
-        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, 'd']:
-            combinations.set_(door)
-            combinations.current.start()
-            key_history.just_matched = True
-        elif key_history.list == [pynput.keyboard.Key.space, pynput.keyboard.Key.alt_l, 'c']:
-            combinations.set_(cameras)
-            combinations.current.start()
+        elif whenCombination('q', wires_task):
+            pass
+        elif whenCombination('w', weatherNode_task):
+            pass
+        elif whenCombination('e', startReactor_task):
+            pass
+        elif whenCombination('r', doorOpen_other):
+            pass
+        elif whenCombination('a', calibrateDistribution_task):
+            pass
+        elif whenCombination('s', chartCourse_task):
+            pass
+        elif whenCombination('d', unlockManifolds_task):
+            pass
+        elif whenCombination('x', o2Fix_sabotage):
+            pass
+        elif whenCombination('c', cameraFlip_other, just_matched=False):
+            pass
         else:
             key_history.just_matched = False
 
@@ -135,13 +142,16 @@ if __name__ == '__main__':
     random = Power(randomLights_method)
     initiatives = Solution(auto)
 
-    wires = Power(fixWires_method)
-    node = Power(weatherNode_method)
-    sabotageO2 = Power(fixO2_method)
-    reactor = Power(startReactor_method)
-    cameras = Power(camerasFlip_method)
-    door = Power(openDoor_method)
-    combinations = Solution(node)  # any
+    wires_task = Power(wires_task)
+    weatherNode_task = Power(weatherNode_task)
+    o2Fix_sabotage = Power(o2Fix_sabotage)
+    startReactor_task = Power(startReactor_task)
+    cameraFlip_other = Power(cameraFlip_other)
+    doorOpen_other = Power(doorOpen_other)
+    calibrateDistribution_task = Power(calibrateDistribution_task)
+    chartCourse_task = Power(chartCourse_task)
+    unlockManifolds_task = Power(unlockManifolds_task)
+    combinations = Solution(weatherNode_task)  # any
 
     key_history = KeyHistory()
 
