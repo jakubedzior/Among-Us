@@ -3,7 +3,7 @@ import ctypes
 
 
 class Node:
-    def __init__(self):
+    def __init__(self, sides=['left', 'right']):
         user32 = ctypes.windll.user32
         user32.SetProcessDPIAware()
         screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
@@ -16,10 +16,10 @@ class Node:
             }
         elif screensize == (2736, 1824):
             self.board = {
-                'x1': 660,
-                'y1': 670,
-                'x2': 2075,
-                'y2': 1023
+                'x1': 610,
+                'y1': 650,
+                'x2': 2120,
+                'y2': 1030
             }
         else:
             raise IndexError("Your screen's size is not supported.")
@@ -30,29 +30,30 @@ class Node:
         self.direction = 'S'
         self.counter = 0
         self.image = py.screenshot()
+        self.sides = sides
 
 
     def solve(self):
 
-        def getNextDirection(direction):
-            if direction == 'S':
-                return 'W'
-            if direction == 'W':
-                return 'N'
-            if direction == 'N':
-                return 'E'
-            if direction == 'E':
-                return 'S'
-        
-        def getPreviousDirection(direction):
-            if direction == 'S':
-                return 'E'
-            if direction == 'E':
-                return 'N'
-            if direction == 'N':
-                return 'W'
-            if direction == 'W':
-                return 'S'
+        def getNearDirection(direction: str, order: str):
+            if order == 'right':
+                if direction == 'S':
+                    return 'W'
+                if direction == 'W':
+                    return 'N'
+                if direction == 'N':
+                    return 'E'
+                if direction == 'E':
+                    return 'S'
+            if order == 'left':
+                if direction == 'S':
+                    return 'E'
+                if direction == 'E':
+                    return 'N'
+                if direction == 'N':
+                    return 'W'
+                if direction == 'W':
+                    return 'S'
         
         def getPosition(self, direction):
             if direction == 'S':
@@ -89,7 +90,7 @@ class Node:
 
         def moveToDirection(self, direction):
             moveToPosition(self, getPosition(self, direction))
-            self.direction = getPreviousDirection(getPreviousDirection(direction))
+            self.direction = getNearDirection(getNearDirection(direction, self.sides[0]), self.sides[0])
 
 
         def clean(self):
@@ -106,7 +107,7 @@ class Node:
                         pass
 
         def whenNextStep(self):
-            next_direction = getNextDirection(self.direction)
+            next_direction = getNearDirection(self.direction, self.sides[1])
             if ifDirectionFree(self, next_direction):
                 moveToDirection(self, next_direction)
                 self.counter = 0
@@ -124,7 +125,6 @@ class Node:
                 return True
             return False
 
-        
         while True:
             if whenNextStep(self) is False:
                 return None
@@ -133,10 +133,34 @@ class Node:
                 self.path.append((self.board['x2'], self.board['y2'] + self.step))
                 return self.path
 
+def get_concat_solutions(sol1: list, sol2: list):
+    solution = sol1.copy()
+    for step1 in sol1[::-1]:
+        found = False
+        for step2 in sol1:
+            if found:
+                continue
+            if step1 not in sol2 or step2 not in sol2:
+                continue
+            if sol1.index(step2) - sol1.index(step1) <= 1:
+                continue
+            if (solution.index(step2) - solution.index(step1)) - (sol2.index(step2) - sol2.index(step1)) <= 0:
+                continue
+            found = True
+            solution[solution.index(step1):solution.index(step2)] = sol2[sol2.index(step1):sol2.index(step2)]
+    return solution
+
+
 
 def weatherNode_task():
-    node = Node()
-    solution = node.solve()
+    node = Node(['left', 'right'])
+    solution_left = node.solve()
+
+    node = Node(['right', 'left'])
+    solution_right = node.solve()
+
+    solution = get_concat_solutions(solution_left, solution_right)
+
     try:
         for i, step in enumerate(solution):
             if i == 0:
