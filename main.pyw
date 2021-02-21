@@ -77,6 +77,8 @@ def whenCombination(key: str, power: Power, just_matched: bool = True):
 def on_click(x, y, button, pressed):
     if pressed and button == pynput.mouse.Button.middle:
         initiatives.current.changeState()
+        if initiatives.current.state is True:
+            print('Fixing lights...')
     if pressed and button == pynput.mouse.Button.right and initiatives.current == auto and initiatives.current.state is True:
         initiatives.current.stop()
         if initiatives.current.args != [True]:
@@ -115,25 +117,35 @@ def on_press(key):
         if key == pynput.keyboard.Key.space and key_history.just_matched is True:
             combinations.current.start()
         elif whenCombination('q', wires_task):
+            print('Fixing wires...')
             pass
         elif whenCombination('w', weatherNode_task):
+            print('Fixing weather node...')
             pass
         elif whenCombination('e', startReactor_task):
+            print('Starting reactor...')
             pass
         elif whenCombination('r', doorOpen_other):
+            print('Opening door...')
             pass
         elif whenCombination('a', calibrateDistribution_task):
+            print('Calibrating distribution...')
             pass
         elif whenCombination('s', chartCourse_task):
+            print('Doing chart course...')
             pass
         elif whenCombination('d', unlockManifolds_task):
+            print('Unlocking manifolds...')
             pass
         elif whenCombination('x', o2Fix_sabotage):
+            print('Fixing o2...')
             pass
-        elif whenCombination('c', cameraFlip_other, just_matched=False):
+        elif whenCombination('c', cameraFlip_other):
+            print('Flipping cams...')
             pass
         else:
-            key_history.just_matched = False
+            if key != pynput.keyboard.Key.esc:
+                key_history.just_matched = False
 
 
 if __name__ == '__main__':
