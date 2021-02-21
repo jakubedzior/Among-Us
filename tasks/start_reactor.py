@@ -23,7 +23,7 @@ def startReactor_task():
         for i in range(9):
             display.append((buttons[i][0] - offset, buttons[i][1]))
 
-        return tuple(buttons), tuple(display)      
+        return tuple(buttons), tuple(display)
         
     user32 = ctypes.windll.user32
     user32.SetProcessDPIAware()
@@ -31,13 +31,12 @@ def startReactor_task():
     if screensize == (1920, 1080):
         buttons, display = getScreenCredentials((1260, 600), 250, 600)
     elif screensize == (2736, 1824):
-        buttons, display = getScreenCredentials((1800, 1000), 360, 900)
+        buttons, display = getScreenCredentials((1875, 1010), 430, 1000)
     else:
         raise IndexError("Your screen's size is not supported.")
 
     color_blue = (68, 168, 255)
     color_black = (0, 0, 0)
-
 
     for _ in range(5):
         button_history = []

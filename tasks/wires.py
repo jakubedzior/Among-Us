@@ -13,8 +13,8 @@ def wires_task():
         }
     elif screensize == (2736, 1824):
         positions = {
-            'x': (750, 1990),
-            'y': (490, 790, 1080, 1375)
+            'x': (710, 2020),
+            'y': (460, 780, 1090, 1400)
         }
     else:
         raise IndexError("Your screen's size is not supported.")

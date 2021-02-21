@@ -29,8 +29,8 @@ def o2Fix_sabotage():
         region = (1300, 485, 1425, 525)
         buttons = getScreenCredentials((800, 380), (1125, 870))
     elif screensize == (2736, 1824):
-        region = (1900, 830, 2120, 900)
-        buttons = getScreenCredentials((1100, 660), (1620, 1440))
+        region = (1950, 830, 2150, 885)
+        buttons = getScreenCredentials((1090, 650), (1640, 1470))
     else:
         raise IndexError("Your screen's size is not supported.")
 
@@ -38,19 +38,16 @@ def o2Fix_sabotage():
     img = py.screenshot()
     img = img.rotate(-25)
     img = img.crop(region)
-    img = img.resize((125, 40))
+    # img = img.resize((125, 40))
     img = img.convert('LA')
     img = img.point(lambda p: p > 100 and 255)
     img = img.filter(ImageFilter.GaussianBlur(radius=1))
     img = img.point(lambda p: p > 200 and 255)
-    # img = img.resize((img.size[0]*2, img.size[1]*2), Image.ANTIALIAS)
-    # img.show()
 
 
-    # pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
-    string = pytesseract.pytesseract.image_to_string(img, config='-c tessedit_char_whitelist=0123456789')
+    string = pytesseract.pytesseract.image_to_string(img, config='--psm 8 -c tessedit_char_whitelist=0123456789')
     string = string[:5]
-    
+
     if string.isnumeric():
         number = [int(sign) for sign in string]
     else:

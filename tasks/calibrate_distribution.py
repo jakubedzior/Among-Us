@@ -29,7 +29,7 @@ def calibrateDistribution_task():
     if screensize == (1920, 1080):
         buttons, pixels = getScreenCredentials(820, 290, 1240, 820)
     elif screensize == (2736, 1824):
-        buttons, pixels = getScreenCredentials(1166, 558, 1750, 1309)
+        buttons, pixels = getScreenCredentials(1120, 495, 1820, 1390)
     else:
         raise IndexError("Your screen's size is not supported.")
 

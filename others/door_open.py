@@ -23,7 +23,7 @@ def doorOpen_other():
     if screensize == (1920, 1080):
         buttons = getScreenCredentials((875, 215), (1210, 800))
     elif screensize == (2736, 1824):
-        buttons = getScreenCredentials((1250, 450), (1720, 1285))
+        buttons = getScreenCredentials((1230, 365), (1788, 1348))
     else:
         raise IndexError("Your screen's size is not supported.")
 

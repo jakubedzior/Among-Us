@@ -6,30 +6,43 @@ import ctypes
 
 
 def autoLights_method(reverse=False):
+    def getScreenCredentials(left: tuple, right: tuple): 
+        '''
+        left: position of most left switch
+        right: position of most right switch
+        '''
+        size = (right[0] - left[0]) / 4
+        
+        buttons = []
+        for i in range(5):
+            buttons.append((left[0] + size * i, left[1]))
+
+        return tuple(buttons)
+
     user32 = ctypes.windll.user32
     user32.SetProcessDPIAware()
     screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
     if screensize == (1920, 1080):
-        positions = ((612, 900), (788, 900), (960, 900), (1140, 900), (1310, 900))
+        buttons = getScreenCredentials((612, 900), (1310, 900))
         offset = -100
     elif screensize == (2736, 1824):
-        positions = ((820, 1480), (1100, 1480), (1370, 1480), (1650, 1480), (1920, 1480))
+        buttons = getScreenCredentials((780, 1520), (1960, 1520))
         offset = -200
     else:
         raise IndexError("Your screen's size is not supported.")
         
     start = perf_counter()
     if reverse:
-        button = (0, 255, 0)
+        color_green = (0, 255, 0)
     else:
-        button = (26, 77, 26)
+        color_green = (26, 77, 26)
 
 
     while True:
         img = py.screenshot()
-        for pos in positions:
+        for pos in buttons:
             pixel = img.getpixel(pos)
-            if pixel == button:
+            if pixel == color_green:
                 py.click((pos[0], pos[1] + offset))
 
         now = perf_counter()
@@ -39,13 +52,26 @@ def autoLights_method(reverse=False):
 
 
 def randomLights_method():
+    def getScreenCredentials(left: tuple, right: tuple): 
+        '''
+        left: position of most left switch
+        right: position of most right switch
+        '''
+        size = (right[0] - left[0]) / 4
+        
+        buttons = []
+        for i in range(5):
+            buttons.append((left[0] + size * i, left[1]))
+
+        return tuple(buttons)
+
     user32 = ctypes.windll.user32
     user32.SetProcessDPIAware()
     screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
     if screensize == (1920, 1080):
-        positions = ((612, 800), (788, 800), (960, 800), (1140, 800), (1310, 800))
+        buttons = getScreenCredentials((612, 900), (1310, 900))
     elif screensize == (2736, 1824):
-        positions = ((820, 1280), (1100, 1280), (1370, 1280), (1650, 1280), (1920, 1280))
+        buttons = getScreenCredentials((780, 1320), (1960, 1320))
     else:
         raise IndexError("Your screen's size is not supported.")
 
@@ -53,7 +79,7 @@ def randomLights_method():
     while True:
         start = perf_counter()
 
-        for pos in positions:
+        for pos in buttons:
             if randint(0, 1) == 1:
                 py.click(pos)
 
@@ -64,13 +90,26 @@ def randomLights_method():
 
 
 def manualLights_method():
+    def getScreenCredentials(left: tuple, right: tuple): 
+        '''
+        left: position of most left switch
+        right: position of most right switch
+        '''
+        size = (right[0] - left[0]) / 4
+        
+        buttons = []
+        for i in range(5):
+            buttons.append((left[0] + size * i, left[1]))
+
+        return tuple(buttons)
+
     user32 = ctypes.windll.user32
     user32.SetProcessDPIAware()
     screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
     if screensize == (1920, 1080):
-        positions = ((612, 800), (788, 800), (960, 800), (1140, 800), (1310, 800))
+        buttons = getScreenCredentials((612, 900), (1310, 900))
     elif screensize == (2736, 1824):
-        positions = ((820, 1280), (1100, 1280), (1370, 1280), (1650, 1280), (1920, 1280))
+        buttons = getScreenCredentials((780, 1320), (1960, 1320))
     else:
         raise IndexError("Your screen's size is not supported.")
 
@@ -81,7 +120,7 @@ def manualLights_method():
         try:
             if key.char in keys:
                 index = keys.index(key.char)
-                py.click(positions[index])
+                py.click(buttons[index])
         except AttributeError:  # special key
             pass
 

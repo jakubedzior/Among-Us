@@ -19,15 +19,15 @@ def chartCourse_task():
 
         y_ticks = [(top + i * size[1]) for i in range(100)]
 
-        return (left, top, right, bottom), tuple(x_ticks), tuple(y_ticks), size
+        return tuple(x_ticks), tuple(y_ticks), size
         
     user32 = ctypes.windll.user32
     user32.SetProcessDPIAware()
     screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
     if screensize == (1920, 1080):
-        region, x_ticks, y_ticks, size = getScreenCredentials(460, 260, 1450, 820)
+        x_ticks, y_ticks, size = getScreenCredentials(460, 260, 1450, 820)
     elif screensize == (2736, 1824):
-        region, x_ticks, y_ticks, size = getScreenCredentials(660, 513, 2076, 1311)
+        x_ticks, y_ticks, size = getScreenCredentials(525, 440, 2210, 1380)
     else:
         raise IndexError("Your screen's size is not supported.")
 

@@ -13,7 +13,7 @@ def unlockManifolds_task():
     if screensize == (1920, 1080):
         region = (570, 380, 1345, 700)
     elif screensize == (2736, 1824):
-        region = (760, 670, 1975, 1165)
+        region = (715, 650, 2020, 1180)
     else:
         raise IndexError("Your screen's size is not supported.")
 
@@ -36,12 +36,11 @@ def unlockManifolds_task():
     # img = Image.open('./Screenshots/nums_small.png')
     img = img.crop(region)
 
-    img = img.resize((775, 320))
     img = img.convert('L')
     img = img.point(lambda p: p > 100 and 255)
     img = img.filter(ImageFilter.GaussianBlur(radius=1))
     img = img.point(lambda p: p > 200 and 255)
-
+    img.show()
     squares = []
     for i in range(2):
         for j in range(5):
