@@ -12,6 +12,7 @@ from tasks.start_reactor import startReactor_task
 from tasks.unlock_manifolds import unlockManifolds_task
 from tasks.weather_node import weatherNode_task
 from tasks.wires import wires_task
+from tasks.clear_asteroids import clearAsteroids_task
 
 
 class Power():
@@ -118,31 +119,24 @@ def on_press(key):
             combinations.current.start()
         elif whenCombination('q', wires_task):
             print('Fixing wires...')
-            pass
         elif whenCombination('w', weatherNode_task):
             print('Fixing weather node...')
-            pass
         elif whenCombination('e', startReactor_task):
             print('Starting reactor...')
-            pass
         elif whenCombination('r', doorOpen_other):
             print('Opening door...')
-            pass
         elif whenCombination('a', calibrateDistribution_task):
             print('Calibrating distribution...')
-            pass
         elif whenCombination('s', chartCourse_task):
             print('Doing chart course...')
-            pass
         elif whenCombination('d', unlockManifolds_task):
             print('Unlocking manifolds...')
-            pass
+        elif whenCombination('f', clearAsteroids_task):
+            print('Clearing asteroids...')
         elif whenCombination('x', o2Fix_sabotage):
             print('Fixing o2...')
-            pass
         elif whenCombination('c', cameraFlip_other):
             print('Flipping cams...')
-            pass
         else:
             if key != pynput.keyboard.Key.esc:
                 key_history.just_matched = False
@@ -163,6 +157,7 @@ if __name__ == '__main__':
     calibrateDistribution_task = Power(calibrateDistribution_task)
     chartCourse_task = Power(chartCourse_task)
     unlockManifolds_task = Power(unlockManifolds_task)
+    clearAsteroids_task = Power(clearAsteroids_task)
     combinations = Solution(weatherNode_task)  # any
 
     key_history = KeyHistory()
