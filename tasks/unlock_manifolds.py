@@ -40,7 +40,7 @@ def unlockManifolds_task():
     img = img.point(lambda p: p > 100 and 255)
     img = img.filter(ImageFilter.GaussianBlur(radius=1))
     img = img.point(lambda p: p > 200 and 255)
-    img.show()
+    # img.show()
     squares = []
     for i in range(2):
         for j in range(5):
@@ -87,7 +87,6 @@ def unlockManifolds_task():
         for i in range(10):
             finals.append(results[order.index(i)])
         break
-
     if len(finals) == 10:
         for index in range(10):
             py.click(buttons[finals.index(index)])
