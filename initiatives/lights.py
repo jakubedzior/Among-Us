@@ -69,7 +69,7 @@ def randomLights_method():
     user32.SetProcessDPIAware()
     screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
     if screensize == (1920, 1080):
-        buttons = getScreenCredentials((612, 900), (1310, 900))
+        buttons = getScreenCredentials((612, 800), (1310, 800))
     elif screensize == (2736, 1824):
         buttons = getScreenCredentials((780, 1320), (1960, 1320))
     else:
